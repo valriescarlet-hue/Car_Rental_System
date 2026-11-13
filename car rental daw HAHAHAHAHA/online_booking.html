@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCLMR | Luxury Car Rentals</title>
+    <style>
+        /* Modern Reset & Root Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --bg-main: #0b1120;
+            --bg-card: #151e32;
+            --bg-nav: rgba(15, 23, 42, 0.9);
+            --border-color: #23314d;
+            --border-hover: #3b82f6;
+            --accent-blue: #3b82f6;
+            --accent-hover: #2563eb;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Executive Header Navigation */
+        header {
+            background-color: var(--bg-nav);
+            backdrop-filter: blur(12px);
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--accent-blue);
+        }
+
+        nav a {
+            margin-left: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover, nav a.nav-active {
+            color: var(--accent-blue);
+        }
+
+        /* Hero Banner */
+        .hero {
+            text-align: center;
+            padding: 4.5rem 1.5rem 3.5rem;
+            background: radial-gradient(circle at top, #1e2942 0%, var(--bg-main) 70%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--accent-blue);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            padding: 0.35rem 1rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.25rem;
+        }
+
+        .hero h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Content Sections */
+        section {
+            scroll-margin-top: 80px;
+        }
+
+        .section-block {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            max-width: 750px;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* Filter & Controls Bar */
+        .controls {
+            max-width: 1150px;
+            margin: 2.5rem auto 1rem;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background-color: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            border-color: var(--accent-blue);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .search-box input {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            width: 260px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-blue);
+        }
+
+        /* Vehicles Grid Layout */
+        .container {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            width: 100%;
+        }
+
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .car-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
+        }
+
+        .car-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .car-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 210px;
+            overflow: hidden;
+            background-color: #0d1527;
+        }
+
+        .car-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .car-card:hover img {
+            transform: scale(1.03);
+        }
+
+        .car-info {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .car-category {
+            color: var(--accent-blue);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            margin-bottom: 0.4rem;
+        }
+
+        .car-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .car-details {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .price {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .price span {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .book-btn {
+            background-color: var(--accent-blue);
+            color: #ffffff;
+            border: none;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .book-btn:hover {
+            background-color: var(--accent-hover);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Modal Overlay & Card Details Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(11, 17, 32, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            padding: 2rem;
+            border-radius: 14px;
+            max-width: 520px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close-icon {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-close-icon:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-content h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+        }
+
+        .car-details-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .car-specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            background: var(--bg-main);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .spec-item {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .spec-item strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .summary-box {
+            background-color: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-box span {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .summary-box h4 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--accent-blue);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .cancel-btn {
+            background-color: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 50%;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .cancel-btn:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+
+        /* Contact & About Cards */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.75rem;
+            border-radius: 12px;
+        }
+
+        .info-card h4 {
+            color: var(--accent-blue);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .info-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background-color: var(--bg-main);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Executive Header Navbar -->
+    <header>
+        <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">JCLMR <span>DRIVE</span></div>
+        <nav>
+            <a href="#fleet" class="nav-active">Fleet</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">Executive Fleet Services</div>
+        <h1>Online Vehicle Booking</h1>
+        <p>Browse our luxury collection, view full specs, and book your rental online seamlessly.</p>
+    </section>
+
+    <!-- Filter and Search Controls -->
+    <div class="controls" id="fleet">
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterCategory('all', this)">All Fleet</button>
+            <button class="filter-btn" onclick="filterCategory('sedan', this)">Sedans</button>
+            <button class="filter-btn" onclick="filterCategory('sports', this)">Sports</button>
+            <button class="filter-btn" onclick="filterCategory('suv', this)">SUVs</button>
+        </div>
+        <div class="search-box">
+            <input type="text" id="search-input" onkeyup="searchCars()" placeholder="Search vehicle model...">
+        </div>
+    </div>
+
+    <!-- Vehicles Grid Container -->
+    <main class="container">
+        <div class="car-grid" id="car-grid">
+            <!-- Dynamically populated by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Section: About Us -->
+    <section id="about" class="section-block">
+        <h2 class="section-title">About JCLMR Drive</h2>
+        <p class="section-desc">We deliver premium mobility solutions across major metropolitan hubs and airport terminals in the Philippines. Our curated fleet features meticulously maintained sports cars, executive sedans, and high-performance luxury SUVs configured for supreme comfort and safety.</p>
+        <div class="info-cards">
+            <div class="info-card">
+                <h4>Chauffeur & Self-Drive</h4>
+                <p>Choose between executive personal drivers or seamless self-drive options tailored to your itinerary.</p>
+            </div>
+            <div class="info-card">
+                <h4>VIP Airport Pickup</h4>
+                <p>Direct terminal delivery and express handovers at Clark International (CRK) and Manila (NAIA).</p>
+            </div>
+            <div class="info-card">
+                <h4>Full Coverage Insurance</h4>
+                <p>Comprehensive protection and 24/7 roadside concierge support on every reservation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Contact -->
+    <section id="contact" class="section-block">
+        <h2 class="section-title">Contact & Support</h2>
+        <p class="section-desc">Have custom requirements or long-term lease inquiries? Get in touch with our concierge desk.</p>
+        <div class="form-row">
+            <div class="info-card">
+                <h4>Concierge Desk</h4>
+                <p><strong>Hotline:</strong> +63 (045) 892-3400</p>
+                <p><strong>Mobile:</strong> 0917 123 4567</p>
+                <p><strong>Email:</strong> concierge@jclmrdrive.ph</p>
+                <p><strong>Hours:</strong> 24/7 Service Desk</p>
+            </div>
+            <div class="info-card">
+                <h4>Inquiry Form</h4>
+                <form onsubmit="submitInquiry(event)">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" required placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Message / Request</label>
+                        <textarea rows="3" required placeholder="Type your message..."></textarea>
+                    </div>
+                    <button type="submit" class="book-btn" style="width: 100%;">Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal 1: Car Details Preview -->
+    <div class="modal" id="details-modal">
+        <div class="modal-content">
+            <button class="modal-close-icon" onclick="closeModal('details-modal')">&times;</button>
+            <h3 id="details-car-name">Vehicle Details</h3>
+            <img id="details-car-img" src="" alt="Car Image" class="car-details-img">
+            
+            <div class="car-specs-grid">
+                <div class="spec-item"><strong>Category</strong><span id="details-car-cat"></span></div>
+                <div class="spec-item"><strong>Daily Rate</strong><span id="details-car-price"></span></div>
+                <div class="spec-item"><strong>Performance / Specs</strong><span id="details-car-specs"></span></div>
+                <div class="spec-item"><strong>Status</strong><span style="color:#10b981;">Available Now</span></div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="book-btn" style="width: 50%;" id="details-book-now-btn">Book Online</button>
+                <button type="button" class="cancel-btn" onclick="closeModal('details-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Online Booking Checkout Form -->
+    <div class="modal" id="booking-modal">
+        <div class="modal-content">
+            <button class="modal-close-icon" onclick="closeModal('booking-modal')">&times;</button>
+            <h3 id="modal-car-name">Online Reservation</h3>
+            <form onsubmit="confirmReservation(event)">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="book-name" required placeholder="Juan Dela Cruz">
+                    </div>
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" id="book-phone" required placeholder="0917 123 4567">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="book-email" required placeholder="juan@example.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pickup Date</label>
+                        <input type="date" id="pickup-date" required onchange="calculateDaysAndTotal()">
+                    </div>
+                    <div class="form-group">
+                        <label>Return Date</label>
+                        <input type="date" id="return-date" required onchange="calculateDaysAndTotal()">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pickup Location Hub</label>
+                        <select id="book-hub">
+                            <option value="Manila Flagship Hub">Manila Flagship Hub</option>
+                            <option value="Clark International (CRK)">Clark International (CRK)</option>
+                            <option value="BGC Taguig Terminal">BGC Taguig Terminal</option>
+                            <option value="Cebu Mactan Airport">Cebu Mactan Airport</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Rental Duration (Days)</label>
+                        <input type="number" min="1" max="30" value="1" required id="modal-days" onchange="calculateDaysAndTotal()" oninput="calculateDaysAndTotal()">
+                    </div>
+                </div>
+
+                <!-- Price Summary Box -->
+                <div class="summary-box">
+                    <div>
+                        <span>Estimated Total Payment</span>
+                        <p style="font-size:0.75rem; color:var(--text-secondary);" id="summary-breakdown">1 Day rental</p>
+                    </div>
+                    <h4 id="modal-total-price">₱0</h4>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="book-btn" style="width: 50%;">Confirm Booking</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal('booking-modal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 JCLMR Car Rental Services. All rights reserved.</p>
+    </footer>
+
+    <!-- App JavaScript -->
+    <script>
+        // Car Data List
+        const cars = [
+            {
+                id: 1,
+                name: "Porsche Taycan Turbo S",
+                category: "sports",
+                price: 25000,
+                specs: "750 HP • Electric • 4 Seats",
+                image: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                name: "Mercedes-AMG GT R",
+                category: "sports",
+                price: 28000,
+                specs: "577 HP • V8 Twin-Turbo • 2 Seats",
+                image: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                name: "Rolls-Royce Ghost",
+                category: "sedan",
+                price: 50000,
+                specs: "563 HP • V12 Engine • 5 Seats",
+                image: "https://images.unsplash.com/photo-1631295868223-63265b40d9e4?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 4,
+                name: "Lamborghini Urus",
+                category: "suv",
+                price: 38000,
+                specs: "641 HP • V8 Twin-Turbo • 5 Seats",
+                image: "https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 5,
+                name: "BMW M5 Competition",
+                category: "sedan",
+                price: 20000,
+                specs: "617 HP • AWD • 5 Seats",
+                image: "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 6,
+                name: "Range Rover Autobiography",
+                category: "suv",
+                price: 23000,
+                specs: "523 HP • Luxury Interior • 5 Seats",
+                image: "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&w=600&q=80"
+            }
+        ];
+
+        let selectedCarPrice = 0;
+        let selectedCarName = "";
+
+        // Render Car Listing Cards to Grid
+        function displayCars(items) {
+            const grid = document.getElementById('car-grid');
+            grid.innerHTML = "";
+
+            if (items.length === 0) {
+                grid.innerHTML = "<p style='color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 3rem 0;'>No matching vehicles found.</p>";
+                return;
+            }
+
+            items.forEach(car => {
+                grid.innerHTML += `
+                    <div class="car-card" onclick="openDetailsModal(${car.id})">
+                        <div class="car-image-wrapper">
+                            <img src="${car.image}" alt="${car.name}">
+                        </div>
+                        <div class="car-info">
+                            <div>
+                                <div class="car-category">${car.category}</div>
+                                <div class="car-title">${car.name}</div>
+                                <div class="car-details">${car.specs}</div>
+                            </div>
+                            <div class="price-row">
+                                <div class="price">₱${car.price.toLocaleString()} <span>/ day</span></div>
+                                <button class="book-btn" onclick="event.stopPropagation(); openBookingModal('${car.name}', ${car.price})">Book Online</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Category Filter
+        function filterCategory(category, button) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            if (category === 'all') {
+                displayCars(cars);
+            } else {
+                const filtered = cars.filter(car => car.category === category);
+                displayCars(filtered);
+            }
+        }
+
+        // Search Input Filter
+        function searchCars() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filtered = cars.filter(car => car.name.toLowerCase().includes(query));
+            displayCars(filtered);
+        }
+
+        // Open Car Specs Details Modal
+        function openDetailsModal(id) {
+            const car = cars.find(item => item.id === id);
+            if (!car) return;
+
+            document.getElementById('details-car-name').innerText = car.name;
+            document.getElementById('details-car-img').src = car.image;
+            document.getElementById('details-car-cat').innerText = car.category.toUpperCase();
+            document.getElementById('details-car-price').innerText = `₱${car.price.toLocaleString()} / day`;
+            document.getElementById('details-car-specs').innerText = car.specs;
+
+            document.getElementById('details-book-now-btn').onclick = function() {
+                closeModal('details-modal');
+                openBookingModal(car.name, car.price);
+            };
+
+            document.getElementById('details-modal').style.display = 'flex';
+        }
+
+        // Open Booking Modal Form
+        function openBookingModal(carName, price) {
+            selectedCarPrice = price;
+            selectedCarName = carName;
+            document.getElementById('modal-car-name').innerText = `Book Online: ${carName}`;
+            document.getElementById('modal-days').value = 1;
+            
+            const today = new Date().toISOString().split('T')[0];
+            const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+            document.getElementById('pickup-date').value = today;
+            document.getElementById('return-date').value = tomorrow;
+
+            calculateDaysAndTotal();
+            document.getElementById('booking-modal').style.display = 'flex';
+        }
+
+        // Generic Close Modal Helper
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Calculate Rental Days & Price Total
+        function calculateDaysAndTotal() {
+            const pickupVal = document.getElementById('pickup-date').value;
+            const returnVal = document.getElementById('return-date').value;
+            let daysInput = document.getElementById('modal-days');
+
+            if (pickupVal && returnVal) {
+                const d1 = new Date(pickupVal);
+                const d2 = new Date(returnVal);
+                const diffTime = d2 - d1;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                
+                if (diffDays > 0) {
+                    daysInput.value = diffDays;
+                }
+            }
+
+            const days = parseInt(daysInput.value) || 1;
+            const total = selectedCarPrice * days;
+            
+            document.getElementById('summary-breakdown').innerText = `${days} Day(s) @ ₱${selectedCarPrice.toLocaleString()} / day`;
+            document.getElementById('modal-total-price').innerText = `₱${total.toLocaleString()}`;
+        }
+
+        // Form Submission Confirmation Handlers
+        function confirmReservation(event) {
+            event.preventDefault();
+            const name = document.getElementById('book-name').value;
+            const hub = document.getElementById('book-hub').value;
+            const days = document.getElementById('modal-days').value;
+            
+            alert(`🎉 Booking Confirmed for ${name}!\n\nVehicle: ${selectedCarName}\nHub: ${hub}\nDuration: ${days} Day(s)\n\nA confirmation email and SMS dispatch code have been sent. Thank you for choosing JCLMR Drive!`);
+            closeModal('booking-modal');
+        }
+
+        function submitInquiry(event) {
+            event.preventDefault();
+            alert("Thank you for your inquiry! Our concierge team will reach out to you within 1 hour.");
+            event.target.reset();
+        }
+
+        // Smooth Nav Link Highlighting
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section[id], div[id="fleet"]');
+            const navLinks = document.querySelectorAll('nav a');
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('nav-active');
+                }
+            });
+        });
+
+        // Initialize Display
+        displayCars(cars);
+    </script>
+</body>
+</html>

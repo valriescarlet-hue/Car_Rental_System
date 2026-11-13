@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCLMR | Smart Car Recommendation Engine</title>
+    <style>
+        :root {
+            --bg-base: #060913;
+            --bg-surface: #0f172a;
+            --bg-surface-hover: #1e293b;
+            --border-subtle: #1e293b;
+            --border-highlight: #3b82f6;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Interactive Filter Category Tabs */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+        }
+
+        .filter-btn {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--border-highlight);
+            color: var(--text-main);
+        }
+
+        .filter-btn.active {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Vehicle Results Grid */
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .car-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .car-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-highlight);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .car-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .car-badge {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .car-price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        .car-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .car-desc {
+            color: var(--text-muted);
+            font-size: 0.925rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .spec-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            background: rgba(0, 0, 0, 0.25);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+
+        .spec-item span {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .spec-item strong {
+            color: var(--text-main);
+        }
+
+        .select-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 0.85rem;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .select-btn:hover {
+            background-color: var(--primary-hover);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-muted);
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🚗 Smart Vehicle Matcher</h1>
+            <p>Select a lifestyle or vehicle category below to instantly view top recommendations.</p>
+        </header>
+
+        <!-- Category Filter Buttons -->
+        <div class="category-filters">
+            <button class="filter-btn active" onclick="filterCategory('all', this)">All Vehicles</button>
+            <button class="filter-btn" onclick="filterCategory('offroad', this)">🏔️ Off-Road & 4x4</button>
+            <button class="filter-btn" onclick="filterCategory('family', this)">🚐 Family & Vans</button>
+            <button class="filter-btn" onclick="filterCategory('city', this)">🏙️ City & Economy</button>
+        </div>
+
+        <!-- Car Results Grid -->
+        <div class="car-grid" id="carGrid">
+            <!-- Dynamically populated via JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const cars = [
+            {
+                name: "Ford Ranger Wildtrak 4x4",
+                category: "offroad",
+                price: "₱1,900,000+",
+                badge: "Rugged 4x4",
+                desc: "Built for extreme terrain with advanced 4WD systems, heavy-duty suspension, and high wading depth for rugged trails and unpaved provincial roads.",
+                seats: "5 Seater",
+                drivetrain: "4WD / Diesel",
+                engine: "2.0L Bi-Turbo"
+            },
+            {
+                name: "Toyota Hilux Conquest",
+                category: "offroad",
+                price: "₱1,400,000 – ₱2,000,000",
+                badge: "Off-Road Legend",
+                desc: "Renowned for bulletproof reliability across rocky paths, mud tracks, and steep inclines. The ultimate heavy-duty adventure workhorse.",
+                seats: "5 Seater",
+                drivetrain: "4x4 / Diesel",
+                engine: "2.8L Diesel"
+            },
+            {
+                name: "Mitsubishi Montero Sport",
+                category: "offroad",
+                price: "₱1,568,000 – ₱2,428,000",
+                badge: "All-Terrain SUV",
+                desc: "Combines plush executive comfort with robust Super-Select 4WD capability, making it elite for both highway cruising and off-road exploration.",
+                seats: "7 Seater",
+                drivetrain: "4x4 / SUV",
+                engine: "2.4L MIVEC Turbo"
+            },
+            {
+                name: "Toyota Innova Zenix Hybrid",
+                category: "family",
+                price: "₱1,674,000 – ₱2,185,000",
+                badge: "Top Family MPV",
+                desc: "The gold standard for Filipino families. Spacious 7-seater layout with captain's seats, hybrid fuel efficiency, and a super smooth ride.",
+                seats: "7-8 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "2.0L Hybrid"
+            },
+            {
+                name: "Hyundai Staria",
+                category: "family",
+                price: "₱1,560,000 – ₱3,030,000",
+                badge: "Luxury Van",
+                desc: "Futuristic spaceship styling with cavernous interior cabin space, wide panoramic windows, and ultimate seating comfort for large families or group travel.",
+                seats: "9 to 11 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "2.2L CRDi Diesel"
+            },
+            {
+                name: "Toyota Hiace Commuter / GL",
+                category: "family",
+                price: "₱1,191,000 – ₱2,800,000",
+                badge: "Reliable Van",
+                desc: "The ultimate transport icon for big families, road trips, and group excursions, offering maximum passenger capacity and proven durability.",
+                seats: "12-15 Seater",
+                drivetrain: "Rear-Wheel Drive",
+                engine: "2.8L Diesel"
+            },
+            {
+                name: "Toyota Wigo",
+                category: "city",
+                price: "₱615,000 – ₱735,000",
+                badge: "City Hatchback",
+                desc: "Compact, agile, and easy on gas—designed specifically for tight campus parking, grocery runs, and heavy city traffic.",
+                seats: "5 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "1.0L 3-Cylinder"
+            },
+            {
+                name: "Honda Brio",
+                category: "city",
+                price: "₱735,000 – ₱863,000",
+                badge: "Smooth City Car",
+                desc: "Features a refined 4-cylinder engine that reduces idle vibration in bumper-to-bumper traffic while keeping a nimble hatchback body.",
+                seats: "5 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "1.2L 4-Cylinder"
+            }
+        ];
+
+        function renderCars(category) {
+            const grid = document.getElementById('carGrid');
+            grid.innerHTML = '';
+
+            const filtered = category === 'all' 
+                ? cars 
+                : cars.filter(car => car.category === category);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="no-results"><h3>No vehicles found in this category</h3></div>`;
+                return;
+            }
+
+            filtered.forEach(car => {
+                const card = document.createElement('div');
+                card.className = 'car-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="car-header">
+                            <span class="car-badge">${car.badge}</span>
+                            <span class="car-price">${car.price}</span>
+                        </div>
+                        <h3 class="car-title">${car.name}</h3>
+                        <p class="car-desc">${car.desc}</p>
+                    </div>
+                    <div>
+                        <div class="spec-list">
+                            <div class="spec-item"><span>Capacity</span><strong>${car.seats}</strong></div>
+                            <div class="spec-item"><span>Drivetrain</span><strong>${car.drivetrain}</strong></div>
+                            <div class="spec-item" style="grid-column: span 2;"><span>Engine Specs</span><strong>${car.engine}</strong></div>
+                        </div>
+                        <button class="select-btn" onclick="alert('Selected ${car.name}! Proceeding to vehicle booking...')">Select Vehicle</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(category, buttonElement) {
+            // Update active button styling
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+
+            // Render matching cars
+            renderCars(category);
+        }
+
+        // Initialize view on load
+        renderCars('all');
+    </script>
+</body>
+</html>

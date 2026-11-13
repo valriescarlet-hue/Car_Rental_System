@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCLMR | Executive Dashboard</title>
+    <style>
+        /* Design System & Variables */
+        :root {
+            --bg-base: #060913;
+            --bg-surface: #0f172a;
+            --bg-surface-hover: #16223b;
+            --border-subtle: #1e293b;
+            --border-highlight: #3b82f6;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --accent-glow: rgba(59, 130, 246, 0.12);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dimmed: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.07) 0%, transparent 50%),
+                linear-gradient(to bottom, var(--bg-base), #020408);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Top Executive Header */
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.15rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-cluster {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            color: var(--text-main);
+        }
+
+        .brand-logo span {
+            color: var(--primary);
+        }
+
+        .system-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #34d399;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--success);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        /* 3rd Button: Log Out Action */
+        .btn-logout {
+            background: rgba(239, 68, 68, 0.08);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 0.5rem 1.25rem;
+            border-radius: var(--radius-md);
+            font-size: 0.825rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-logout:hover {
+            background-color: var(--danger);
+            color: #ffffff;
+            border-color: var(--danger);
+            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Main Dashboard Layout */
+        .dashboard-wrapper {
+            max-width: 1100px;
+            margin: 3.5rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Welcome Section */
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #ffffff 30%, var(--text-muted) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .dashboard-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Unique Dual Split Cards (Button 1 & Button 2) */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+
+        .action-card {
+            background-color: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+            padding: 3rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .action-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, var(--accent-glow), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .action-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--border-highlight);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(59, 130, 246, 0.1);
+        }
+
+        .action-card:hover::after {
+            opacity: 1;
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .card-icon-frame {
+            width: 64px;
+            height: 64px;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+
+        .card-meta-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+        }
+
+        .action-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.75rem;
+        }
+
+        .action-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            flex-grow: 1;
+        }
+
+        /* Unique Action Buttons */
+        .card-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--primary);
+            color: #ffffff;
+            padding: 0.9rem 1.5rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.25);
+        }
+
+        .card-action-btn:hover {
+            background-color: var(--primary-hover);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            transform: translateX(2px);
+        }
+
+        .card-action-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.2s ease;
+        }
+
+        .card-action-btn:hover svg {
+            transform: translateX(5px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-dimmed);
+            font-size: 0.825rem;
+            background-color: var(--bg-base);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem 1.5rem;
+            }
+            .system-badge {
+                display: none;
+            }
+            .dashboard-wrapper {
+                margin: 2rem auto;
+            }
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+            .action-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Executive Header with Status & Logout (3rd Button) -->
+    <header>
+        <div class="brand-cluster">
+            <div class="brand-logo">JCLMR <span>DRIVE</span></div>
+            <div class="system-badge">
+                <div class="pulse-dot"></div>
+                Secure Portal Active
+            </div>
+        </div>
+        <a href="login.html" class="btn-logout" onclick="return confirm('Are you sure you want to log out?');">Log Out</a>
+    </header>
+
+    <!-- Main Dashboard Section -->
+    <main class="dashboard-wrapper">
+        <div class="dashboard-header">
+            <h1>Client Command Center</h1>
+            <p>Select your operational mode below to manage your vehicles or reservations.</p>
+        </div>
+
+        <div class="action-grid">
+            
+            <!-- 1st Button: Go to Car Listing / Rental Booking -->
+            <div class="action-card">
+                <div class="card-header-flex">
+                    <div class="card-icon-frame">🚗</div>
+                    <span class="card-meta-tag">Fleet Access</span>
+                </div>
+                <h3>Rent a Vehicle</h3>
+                <p>Explore our exclusive inventory of executive cars, customize your dates, and secure instant online bookings.</p>
+                <a href="index.html" class="card-action-btn">
+                    <span>Go to Car Listing</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+            <!-- 2nd Button: Go to Car Lending / Owner Portal -->
+            <div class="action-card">
+                <div class="card-header-flex">
+                    <div class="card-icon-frame">🔑</div>
+                    <span class="card-meta-tag">Partner Network</span>
+                </div>
+                <h3>Lend Your Car</h3>
+                <p>Register your personal luxury vehicle with JCLMR's trusted leasing program to generate high daily passive income.</p>
+                <a href="lend-car.html" class="card-action-btn">
+                    <span>Go to Car Lending</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 JCLMR Car Rental Services. Enterprise Security & Encryption Protocols Enabled.</p>
+    </footer>
+
+</body>
+</html>
