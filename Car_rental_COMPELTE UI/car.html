@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCLMR | Luxury Car Rentals</title>
+    <link rel="stylesheet" href="car.css">
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header>
+        <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            JCLMR <span>DRIVE</span>
+        </div>
+
+        <nav>
+            <a href="#fleet">Fleet</a>
+            <a href="#availability" class="nav-checker-btn" onclick="openAvailabilityModal(event)">Availability Checker</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">Executive Fleet Services</div>
+        <h1>Online Vehicle Booking</h1>
+        <p>Browse our off-road, family, and city vehicles, view their specifications, and send a booking request.</p>
+    </section>
+
+    <!-- Filter and Search Controls -->
+    <div class="controls" id="fleet">
+        <div class="filter-buttons">
+            <button class="filter-btn active" onclick="filterCategory('all', this)">All Fleet</button>
+            <button class="filter-btn" onclick="filterCategory('offroad', this)">Off-Road</button>
+            <button class="filter-btn" onclick="filterCategory('family', this)">Family</button>
+            <button class="filter-btn" onclick="filterCategory('city', this)">City Cars</button>
+        </div>
+
+        <div class="search-box">
+            <input
+                type="text"
+                id="search-input"
+                onkeyup="searchCars()"
+                placeholder="Search vehicle model..."
+            >
+        </div>
+    </div>
+
+    <!-- Vehicles Grid -->
+    <main class="container">
+        <div class="car-grid" id="car-grid">
+            <!-- Dynamically populated by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Availability Checker Section -->
+    <section id="availability" class="section-block">
+        <h2 class="section-title">Availability Checker</h2>
+        <p class="section-desc">
+            Choose a vehicle category and rental dates to submit an availability inquiry.
+            Final availability is confirmed by our team.
+        </p>
+
+        <div class="checker-box">
+            <form onsubmit="checkAvailability(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Select Hub Terminal</label>
+                        <select id="check-hub">
+                            <option value="Manila Flagship Hub">Manila Flagship Hub</option>
+                            <option value="Clark International (CRK)">Clark International (CRK)</option>
+                            <option value="BGC Taguig Terminal">BGC Taguig Terminal</option>
+                            <option value="Cebu Mactan Airport">Cebu Mactan Airport</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Vehicle Category</label>
+                        <select id="check-category">
+                            <option value="all">All Categories</option>
+                            <option value="offroad">Off-Road</option>
+                            <option value="family">Family</option>
+                            <option value="city">City Cars</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>From Date</label>
+                        <input type="date" id="check-start" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>To Date</label>
+                        <input type="date" id="check-end" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="book-btn" style="width: 100%; margin-top: 0.5rem;">
+                    Check Availability
+                </button>
+            </form>
+
+            <div class="checker-results" id="checker-results-box">
+                <h4 style="color: #10b981; margin-bottom: 0.5rem;">Fleet Matches</h4>
+                <p id="checker-output-text" style="color: var(--text-secondary); font-size: 0.9rem;"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="section-block">
+        <h2 class="section-title">About JCLMR Drive</h2>
+
+        <p class="section-desc">
+            We provide vehicle options for different journeys across the Philippines.
+            Our fleet includes capable off-road pickups and SUVs, spacious family vehicles,
+            and practical city cars.
+        </p>
+
+        <div class="info-cards">
+            <div class="info-card">
+                <h4>Chauffeur & Self-Drive</h4>
+                <p>Choose between executive personal drivers or self-drive options tailored to your itinerary.</p>
+            </div>
+
+            <div class="info-card">
+                <h4>VIP Airport Pickup</h4>
+                <p>Direct terminal delivery and express handovers at Clark International (CRK) and Manila (NAIA).</p>
+            </div>
+
+            <div class="info-card">
+                <h4>Full Coverage Insurance</h4>
+                <p>Comprehensive protection and 24/7 roadside support on every reservation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section-block">
+        <h2 class="section-title">Contact & Support</h2>
+
+        <p class="section-desc">
+            Have custom requirements or long-term lease inquiries?
+            Get in touch with our concierge desk.
+        </p>
+
+        <div class="form-row">
+            <div class="info-card">
+                <h4>Concierge Desk</h4>
+                <p><strong>Hotline:</strong> +63 (045) 892-3400</p>
+                <p><strong>Mobile:</strong> 0917 123 4567</p>
+                <p><strong>Email:</strong> concierge@jclmrdrive.ph</p>
+                <p><strong>Hours:</strong> 24/7 Service Desk</p>
+            </div>
+
+            <div class="info-card">
+                <h4>Inquiry Form</h4>
+
+                <form onsubmit="submitInquiry(event)">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" required placeholder="Name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message / Request</label>
+                        <textarea rows="3" required placeholder="Type your message..."></textarea>
+                    </div>
+
+                    <button type="submit" class="book-btn" style="width: 100%;">
+                        Send Inquiry
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal 1: Availability Checker -->
+    <div class="modal" id="availability-modal">
+        <div class="modal-content">
+            <button class="modal-close-icon" onclick="closeModal('availability-modal')">&times;</button>
+
+            <h3>Quick Availability Check</h3>
+
+            <form onsubmit="checkModalAvailability(event)">
+                <div class="form-group">
+                    <label>Pickup Hub</label>
+                    <select id="modal-check-hub">
+                        <option value="Manila Flagship Hub">Manila Flagship Hub</option>
+                        <option value="Clark International (CRK)">Clark International (CRK)</option>
+                        <option value="BGC Taguig Terminal">BGC Taguig Terminal</option>
+                        <option value="Cebu Mactan Airport">Cebu Mactan Airport</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pickup Date</label>
+                        <input type="date" id="modal-check-start" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Return Date</label>
+                        <input type="date" id="modal-check-end" required>
+                    </div>
+                </div>
+
+                <div
+                    id="modal-checker-results"
+                    style="display:none; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem;"
+                >
+                    <p style="color: #10b981; font-size: 0.85rem;" id="modal-checker-text"></p>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="book-btn" style="width: 50%;">
+                        Verify Status
+                    </button>
+
+                    <button type="button" class="cancel-btn" onclick="closeModal('availability-modal')">
+                        Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal 2: Vehicle Details -->
+    <div class="modal" id="details-modal">
+        <div class="modal-content">
+            <button class="modal-close-icon" onclick="closeModal('details-modal')">&times;</button>
+
+            <h3 id="details-car-name">Vehicle Details</h3>
+
+            <img id="details-car-img" src="" alt="Car Image" class="car-details-img">
+
+            <div class="car-specs-grid">
+                <div class="spec-item">
+                    <strong>Category</strong>
+                    <span id="details-car-cat"></span>
+                </div>
+
+                <div class="spec-item">
+                    <strong>Vehicle Price</strong>
+                    <span id="details-car-price"></span>
+                </div>
+
+                <div class="spec-item">
+                    <strong>Performance / Specs</strong>
+                    <span id="details-car-specs"></span>
+                </div>
+
+                <div class="spec-item">
+                    <strong>Status</strong>
+                    <span style="color:#10b981;">Subject to confirmation</span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button
+                    type="button"
+                    class="book-btn"
+                    style="width: 50%;"
+                    id="details-book-now-btn"
+                >
+                    Book Online
+                </button>
+
+                <button type="button" class="cancel-btn" onclick="closeModal('details-modal')">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: Online Booking -->
+    <div class="modal" id="booking-modal">
+        <div class="modal-content">
+            <button class="modal-close-icon" onclick="closeModal('booking-modal')">&times;</button>
+
+            <h3 id="modal-car-name">Online Reservation</h3>
+
+            <form onsubmit="confirmReservation(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="book-name" required placeholder="Juan Dela Cruz">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" id="book-phone" required placeholder="0917 123 4567">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="book-email" required placeholder="juan@example.com">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pickup Date</label>
+                        <input type="date" id="pickup-date" required onchange="calculateDaysAndTotal()">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Return Date</label>
+                        <input type="date" id="return-date" required onchange="calculateDaysAndTotal()">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Pickup Location Hub</label>
+                        <select id="book-hub">
+                            <option value="Manila Flagship Hub">Manila Flagship Hub</option>
+                            <option value="Clark International (CRK)">Clark International (CRK)</option>
+                            <option value="BGC Taguig Terminal">BGC Taguig Terminal</option>
+                            <option value="Cebu Mactan Airport">Cebu Mactan Airport</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Rental Duration (Days)</label>
+                        <input
+                            type="number"
+                            min="1"
+                            max="30"
+                            value="1"
+                            required
+                            id="modal-days"
+                            onchange="calculateDaysAndTotal()"
+                            oninput="calculateDaysAndTotal()"
+                        >
+                    </div>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="summary-box">
+                    <div>
+                        <span>Rental Price</span>
+                        <p
+                            style="font-size:0.75rem; color:var(--text-secondary);"
+                            id="summary-breakdown"
+                        >
+                            Our team will confirm the rental rate.
+                        </p>
+                    </div>
+
+                    <h4 id="modal-total-price">Request a quote</h4>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="book-btn" style="width: 50%;">
+                        Confirm Booking
+                    </button>
+
+                    <button type="button" class="cancel-btn" onclick="closeModal('booking-modal')">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 JCLMR Car Rental Services. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ==========================================
+        // VEHICLE DATA
+        // ==========================================
+
+        const cars = [
+            {
+                id: 1,
+                name: "Ford Ranger Wildtrak 4x4",
+                category: "offroad",
+                price: "₱1,900,000+",
+                badge: "Rugged 4x4",
+                desc: "Built for extreme terrain with advanced 4WD systems, heavy-duty suspension, and high wading depth for rugged trails and unpaved provincial roads.",
+                seats: "5 Seater",
+                drivetrain: "4WD / Diesel",
+                engine: "2.0L Bi-Turbo",
+                image: "https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 2,
+                name: "Toyota Hilux Conquest",
+                category: "offroad",
+                price: "₱1,400,000 – ₱2,000,000",
+                badge: "Off-Road Legend",
+                desc: "Renowned for reliability across rocky paths, mud tracks, and steep inclines. The ultimate heavy-duty adventure workhorse.",
+                seats: "5 Seater",
+                drivetrain: "4x4 / Diesel",
+                engine: "2.8L Diesel",
+                image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 3,
+                name: "Mitsubishi Montero Sport",
+                category: "offroad",
+                price: "₱1,568,000 – ₱2,428,000",
+                badge: "All-Terrain SUV",
+                desc: "Combines executive comfort with 4WD capability, making it suitable for highway cruising and off-road exploration.",
+                seats: "7 Seater",
+                drivetrain: "4x4 / SUV",
+                engine: "2.4L MIVEC Turbo",
+                image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 4,
+                name: "Toyota Innova Zenix Hybrid",
+                category: "family",
+                price: "₱1,674,000 – ₱2,185,000",
+                badge: "Top Family MPV",
+                desc: "A spacious family vehicle with a 7-seater layout, captain's seats, hybrid fuel efficiency, and a smooth ride.",
+                seats: "7-8 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "2.0L Hybrid",
+                image: "https://images.unsplash.com/photo-1617469767053-d3b523a0b982?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 5,
+                name: "Hyundai Staria",
+                category: "family",
+                price: "₱1,560,000 – ₱3,030,000",
+                badge: "Luxury Van",
+                desc: "Futuristic styling with a spacious cabin, wide panoramic windows, and comfortable seating for family or group travel.",
+                seats: "9 to 11 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "2.2L CRDi Diesel",
+                image: "https://images.unsplash.com/photo-1566933293069-b55c7f326dd4?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 6,
+                name: "Toyota Hiace Commuter / GL",
+                category: "family",
+                price: "₱1,191,000 – ₱2,800,000",
+                badge: "Reliable Van",
+                desc: "A practical transport option for big families, road trips, and group excursions, with high passenger capacity and proven durability.",
+                seats: "12-15 Seater",
+                drivetrain: "Rear-Wheel Drive",
+                engine: "2.8L Diesel",
+                image: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 7,
+                name: "Toyota Wigo",
+                category: "city",
+                price: "₱615,000 – ₱735,000",
+                badge: "City Hatchback",
+                desc: "Compact and easy to drive, designed for tight parking, everyday errands, and busy city traffic.",
+                seats: "5 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "1.0L 3-Cylinder",
+                image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 8,
+                name: "Honda Brio",
+                category: "city",
+                price: "₱735,000 – ₱863,000",
+                badge: "Smooth City Car",
+                desc: "Features a refined 4-cylinder engine in a nimble hatchback body, suitable for everyday city driving.",
+                seats: "5 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "1.2L 4-Cylinder",
+                image: "https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=600&q=80"
+            },
+                        {
+                id: 9,
+                name: "BYD Tang DM-i",
+                category: "family",
+                price: "₱800,000",
+                badge: "Premium Hybrid SUV",
+                desc: "A premium plug-in hybrid SUV featuring advanced technology, spacious seating, impressive driving range, and a comfortable interior for family journeys.",
+                seats: "7 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "DM-i Plug-in Hybrid",
+                image: "https://images.unsplash.com/photo-1519641471654-76ce0107ad1b?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 10,
+                name: "Toyota Avanza 1.3 E CVT",
+                category: "family",
+                price: "₱844,000+",
+                badge: "Family MPV",
+                desc: "A practical and fuel-efficient family MPV with comfortable seating, a spacious cabin, and a compact design suitable for everyday transportation and family trips.",
+                seats: "7 Seater",
+                drivetrain: "Front-Wheel Drive",
+                engine: "1.3L Gasoline",
+                image: "https://images.unsplash.com/photo-1566933293069-b55c7f326dd4?auto=format&fit=crop&w=600&q=80"
+            },
+            {
+                id: 11,
+                name: "Nissan NP300",
+                category: "offroad",
+                price: "₱850,000",
+                badge: "Heavy-Duty Pickup",
+                desc: "A durable pickup truck designed for demanding work and outdoor adventures, offering a strong chassis, practical cargo capacity, and dependable performance.",
+                seats: "5 Seater",
+                drivetrain: "4x2 / 4x4",
+                engine: "2.5L Diesel",
+                image: "https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=600&q=80"
+            }
+
+        ];
+
+        let selectedCarName = "";
+
+        // ==========================================
+        // DEFAULT DATE SETTINGS
+        // ==========================================
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const today = new Date().toISOString().split("T")[0];
+            const tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
+
+            const dateFields = [
+                "check-start",
+                "modal-check-start"
+            ];
+
+            const returnFields = [
+                "check-end",
+                "modal-check-end"
+            ];
+
+            dateFields.forEach(id => {
+                const field = document.getElementById(id);
+                if (field) field.value = today;
+            });
+
+            returnFields.forEach(id => {
+                const field = document.getElementById(id);
+                if (field) field.value = tomorrow;
+            });
+
+            document.getElementById("check-start").min = today;
+            document.getElementById("check-end").min = tomorrow;
+            document.getElementById("modal-check-start").min = today;
+            document.getElementById("modal-check-end").min = tomorrow;
+        });
+
+        // ==========================================
+        // DISPLAY VEHICLES
+        // ==========================================
+
+        function displayCars(items) {
+            const grid = document.getElementById("car-grid");
+            grid.innerHTML = "";
+
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <p style="
+                        color: var(--text-muted);
+                        grid-column: 1/-1;
+                        text-align: center;
+                        padding: 3rem 0;
+                    ">
+                        No matching vehicles found.
+                    </p>
+                `;
+                return;
+            }
+
+            items.forEach(car => {
+                grid.innerHTML += `
+                    <div class="car-card" onclick="openDetailsModal(${car.id})">
+
+                        <div class="car-image-wrapper">
+                            <img src="${car.image}" alt="${car.name}">
+                        </div>
+
+                        <div class="car-info">
+                            <div>
+                                <div class="car-category">${car.badge}</div>
+
+                                <div class="car-title">${car.name}</div>
+
+                                <div class="car-details">
+                                    ${car.engine} • ${car.drivetrain} • ${car.seats}
+                                </div>
+                            </div>
+
+                            <div class="price-row">
+                                <div class="price">
+                                    ${car.price}
+                                    <span>vehicle price</span>
+                                </div>
+
+                                <button
+                                    class="book-btn"
+                                    onclick="event.stopPropagation(); openBookingModal('${car.name}')"
+                                >
+                                    Book Online
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // ==========================================
+        // CATEGORY FILTER
+        // ==========================================
+
+        function filterCategory(category, button) {
+            document.querySelectorAll(".filter-btn").forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            if (category === "all") {
+                displayCars(cars);
+            } else {
+                const filtered = cars.filter(car => car.category === category);
+                displayCars(filtered);
+            }
+
+            document.getElementById("search-input").value = "";
+        }
+
+        // ==========================================
+        // SEARCH VEHICLES
+        // ==========================================
+
+        function searchCars() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+
+            const filtered = cars.filter(car =>
+                car.name.toLowerCase().includes(query) ||
+                car.category.toLowerCase().includes(query) ||
+                car.badge.toLowerCase().includes(query)
+            );
+
+            displayCars(filtered);
+        }
+
+        // ==========================================
+        // OPEN AVAILABILITY MODAL
+        // ==========================================
+
+        function openAvailabilityModal(event) {
+            event.preventDefault();
+
+            document.getElementById("availability-modal").style.display = "flex";
+        }
+
+        // ==========================================
+        // CHECK AVAILABILITY
+        // ==========================================
+
+        function checkAvailability(event) {
+            event.preventDefault();
+
+            const hub = document.getElementById("check-hub").value;
+            const category = document.getElementById("check-category").value;
+            const start = document.getElementById("check-start").value;
+            const end = document.getElementById("check-end").value;
+
+            if (new Date(end) <= new Date(start)) {
+                alert("Return date must be after the pickup date.");
+                return;
+            }
+
+            let matchingCars = cars;
+
+            if (category !== "all") {
+                matchingCars = cars.filter(car => car.category === category);
+            }
+
+            const resultsBox = document.getElementById("checker-results-box");
+            const outputText = document.getElementById("checker-output-text");
+
+            outputText.innerHTML = `
+                <strong>${matchingCars.length} vehicle listing(s)</strong>
+                match your selected category at
+                <strong>${hub}</strong> from
+                <strong>${start}</strong> to
+                <strong>${end}</strong>.
+
+                <br><br>
+                This is a list of matching vehicles, not a live availability confirmation.
+                Our team must confirm actual availability before your booking is finalized.
+            `;
+
+            resultsBox.style.display = "block";
+        }
+
+        // ==========================================
+        // CHECK AVAILABILITY FROM MODAL
+        // ==========================================
+
+        function checkModalAvailability(event) {
+            event.preventDefault();
+
+            const hub = document.getElementById("modal-check-hub").value;
+            const start = document.getElementById("modal-check-start").value;
+            const end = document.getElementById("modal-check-end").value;
+
+            if (new Date(end) <= new Date(start)) {
+                alert("Return date must be after the pickup date.");
+                return;
+            }
+
+            const resultsDiv = document.getElementById("modal-checker-results");
+            const resultsText = document.getElementById("modal-checker-text");
+
+            resultsText.innerHTML = `
+                Vehicle listings are available to inquire about at
+                <strong>${hub}</strong> between
+                <strong>${start}</strong> and
+                <strong>${end}</strong>.
+
+                Our team will confirm actual availability.
+            `;
+
+            resultsDiv.style.display = "block";
+        }
+
+        // ==========================================
+        // OPEN VEHICLE DETAILS
+        // ==========================================
+
+        function openDetailsModal(id) {
+            const car = cars.find(item => item.id === id);
+
+            if (!car) return;
+
+            document.getElementById("details-car-name").innerText = car.name;
+            document.getElementById("details-car-img").src = car.image;
+            document.getElementById("details-car-cat").innerText = car.category.toUpperCase();
+            document.getElementById("details-car-price").innerText = car.price;
+
+            document.getElementById("details-car-specs").innerText =
+                `${car.engine} • ${car.drivetrain} • ${car.seats}\n\n${car.desc}`;
+
+            document.getElementById("details-book-now-btn").onclick = function() {
+                closeModal("details-modal");
+                openBookingModal(car.name);
+            };
+
+            document.getElementById("details-modal").style.display = "flex";
+        }
+
+        // ==========================================
+        // OPEN BOOKING MODAL
+        // ==========================================
+
+        function openBookingModal(carName) {
+            selectedCarName = carName;
+
+            document.getElementById("modal-car-name").innerText =
+                `Book Online: ${carName}`;
+
+            document.getElementById("modal-days").value = 1;
+
+            const today = new Date().toISOString().split("T")[0];
+            const tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
+
+            document.getElementById("pickup-date").value = today;
+            document.getElementById("return-date").value = tomorrow;
+
+            document.getElementById("pickup-date").min = today;
+            document.getElementById("return-date").min = tomorrow;
+
+            calculateDaysAndTotal();
+
+            document.getElementById("booking-modal").style.display = "flex";
+        }
+
+        // ==========================================
+        // CLOSE MODALS
+        // ==========================================
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Close modal when clicking outside its content
+        document.querySelectorAll(".modal").forEach(modal => {
+            modal.addEventListener("click", function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            });
+        });
+
+        // ==========================================
+        // CALCULATE RENTAL DURATION
+        // ==========================================
+
+        function calculateDaysAndTotal() {
+            const pickupValue = document.getElementById("pickup-date").value;
+            const returnValue = document.getElementById("return-date").value;
+            const daysInput = document.getElementById("modal-days");
+
+            if (pickupValue && returnValue) {
+                const pickupDate = new Date(pickupValue);
+                const returnDate = new Date(returnValue);
+
+                const difference = returnDate - pickupDate;
+                const differenceDays = Math.ceil(difference / (1000 * 60 * 60 * 24));
+
+                if (differenceDays > 0) {
+                    daysInput.value = differenceDays;
+                }
+            }
+
+            const days = parseInt(daysInput.value, 10) || 1;
+
+            document.getElementById("summary-breakdown").innerText =
+                `${days} Day(s). Our team will confirm the rental rate.`;
+
+            document.getElementById("modal-total-price").innerText =
+                "Request a quote";
+        }
+
+        // ==========================================
+        // CONFIRM BOOKING REQUEST
+        // ==========================================
+function confirmReservation(event) {
+    event.preventDefault();
+
+    const name = document.getElementById("book-name").value;
+    const phone = document.getElementById("book-phone").value;
+    const email = document.getElementById("book-email").value;
+    const hub = document.getElementById("book-hub").value;
+    const pickup = document.getElementById("pickup-date").value;
+    const returnDate = document.getElementById("return-date").value;
+    const days = document.getElementById("modal-days").value;
+
+    if (new Date(returnDate) <= new Date(pickup)) {
+        alert("Return date must be after the pickup date.");
+        return;
+    }
+
+    if (!selectedCarName) {
+        alert("Please select a vehicle first.");
+        return;
+    }
+
+    // Find selected vehicle
+    const selectedCar = cars.find(car => car.name === selectedCarName);
+
+    if (!selectedCar) {
+        alert("Vehicle not found.");
+        return;
+    }
+
+    // Save booking information including vehicle price
+    const bookingData = {
+        name: name,
+        phone: phone,
+        email: email,
+        vehicle: selectedCar.name,
+        vehiclePrice: selectedCar.price,
+        hub: hub,
+        pickup: pickup,
+        returnDate: returnDate,
+        days: days
+    };
+
+    sessionStorage.setItem(
+        "jclmrBooking",
+        JSON.stringify(bookingData)
+    );
+
+    // Redirect to agreement page
+    window.location.href = "agreement.html";
+}
+        // ==========================================
+        // SUBMIT INQUIRY
+        // ==========================================
+
+        function submitInquiry(event) {
+            event.preventDefault();
+
+            alert("Thank you for your inquiry! Our concierge team will reach out to you.");
+
+            event.target.reset();
+        }
+
+        // ==========================================
+        // NAVIGATION HIGHLIGHTING
+        // ==========================================
+
+        window.addEventListener("scroll", () => {
+            const sections = document.querySelectorAll('section[id], div[id="fleet"]');
+            const navLinks = document.querySelectorAll('nav a:not(.nav-checker-btn)');
+
+            let current = "";
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove("nav-active");
+
+                if (link.getAttribute("href") === `#${current}`) {
+                    link.classList.add("nav-active");
+                }
+            });
+        });
+
+        // ==========================================
+        // INITIALIZE VEHICLE DISPLAY
+        // ==========================================
+
+        displayCars(cars);
+    </script>
+</body>
+</html>

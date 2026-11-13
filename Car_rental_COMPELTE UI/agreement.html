@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCLMR | Digital Rental Agreement</title>
+    <link rel="stylesheet" href="agreement.css">
+
+</head>
+<body>
+
+    <div class="agreement-container">
+        <div class="agreement-header">
+            <div class="brand-title">JCLMR <span>DRIVE</span></div>
+            <h2>Vehicle Lease & Rental Agreement</h2>
+        </div>
+
+        <!-- Agreement Metadata -->
+        <div class="meta-grid">
+            <div class="meta-item">
+                <span>Agreement ID</span>
+                <strong>JCLMR-AGR-2026-9042</strong>
+            </div>
+            <div class="meta-item">
+                <span>Selected Vehicle</span>
+                <strong>Toyota Raize (CVT)</strong>
+            </div>
+            <div class="meta-item">
+                <span>Rental Period</span>
+                <strong>3 Days (Nov 14 - Nov 17, 2026)</strong>
+            </div>
+            <div class="meta-item">
+                <span>Rate & Deposit</span>
+                <strong>₱2,500 / day + ₱5,000 Deposit</strong>
+            </div>
+        </div>
+
+        <!-- Scrollable Terms & Conditions -->
+        <div class="terms-box">
+            <h4>1. Vehicle Use & Operator Eligibility</h4>
+            <p>The Renter certifies that they possess a valid, unexpired Land Transportation Office (LTO) driver's license (or recognized international permit) and agree not to permit any unauthorized individual to operate the leased vehicle.</p>
+
+            <h4>2. Fuel & Mileage Policy</h4>
+            <p>The vehicle is provided with a full tank of fuel and must be returned at the same level. Failure to do so will result in refueling service charges billed against the security deposit.</p>
+
+            <h4>3. Prohibited Operations</h4>
+            <p>The vehicle shall not be used for illegal activities, speed racing, towing unauthorized trailers, or driving through unmapped off-road trails or unpaved flood zones beyond standard municipal roadways.</p>
+
+            <h4>4. Insurance & Liability</h4>
+            <p>Comprehensive insurance is included during the active lease period. However, the Renter remains fully liable for damages resulting from gross negligence, driving under the influence, or failure to report accidents to local authorities and JCLMR support immediately.</p>
+
+            <h4>5. Return & Late Penalties</h4>
+            <p>The vehicle must be returned to the designated JCLMR drop-off station at the agreed-upon date and time. Late returns exceeding 2 hours without prior extension approval will incur additional daily billing rates.</p>
+        </div>
+
+        <!-- E-Signature & Submission Form -->
+        <form class="signature-section" id="agreementForm" onsubmit="submitAgreement(event)">
+            <label class="checkbox-group">
+                <input type="checkbox" id="agreeCheck" onchange="toggleSubmitButton()">
+                <span>I have read, understood, and agree to all terms and conditions stated in this digital lease agreement.</span>
+            </label>
+
+            <div class="signature-input-group">
+                <label for="sigInput">Digital Signature (Type Full Legal Name)</label>
+                <input type="text" id="sigInput" placeholder="e.g., Jiro Sanchez" required oninput="toggleSubmitButton()">
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn" disabled>Sign & Confirm Agreement</button>
+        </form>
+
+        <div class="success-banner" id="successBanner">
+            ✅ Agreement successfully signed and encrypted! Generating Digital Key Pass...
+        </div>
+    </div>
+
+    <script>
+        function toggleSubmitButton() {
+            const isChecked = document.getElementById('agreeCheck').checked;
+            const signatureText = document.getElementById('sigInput').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (isChecked && signatureText.length > 0) {
+                submitBtn.removeAttribute('disabled');
+            } else {
+                submitBtn.setAttribute('disabled', 'true');
+            }
+        }
+function submitAgreement(event) {
+    event.preventDefault();
+
+    // Disable inputs after submission
+    document.getElementById('agreeCheck').disabled = true;
+    document.getElementById('sigInput').disabled = true;
+    document.getElementById('submitBtn').style.display = 'none';
+
+    // Show success banner
+    const banner = document.getElementById('successBanner');
+    banner.style.display = 'block';
+
+    // Redirect to login.html after 2 seconds
+    setTimeout(() => {
+        window.location.href = 'payment.html';
+    }, 2000);
+}
+    </script>
+</body>
+</html>

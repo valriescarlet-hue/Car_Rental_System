@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCLMR Drive - Payment</title>
+    <link rel="stylesheet" href="pay.css">
+</head>
+<body>
+
+    <header>
+        <h2>JCLMR <span>DRIVE</span></h2>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="cars.html">Cars</a>
+            <a href="booking.html">Bookings</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="page-title">
+            <h1>Complete Your Payment</h1>
+            <p>Secure your booking and enjoy your ride!</p>
+            <div class="underline"></div>
+        </div>
+
+        <div class="payment-layout">
+
+            <!-- PAYMENT FORM -->
+            <section class="payment-form">
+
+                <h2>Customer Information</h2>
+
+                <form id="paymentForm">
+
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name"
+                            placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email"
+                            placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone"
+                            placeholder="09XXXXXXXXX"
+                            pattern="[0-9]{11}" required>
+                    </div>
+
+                    <h2 class="payment-heading">Payment Method</h2>
+
+                    <div class="payment-options">
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment"
+                                value="GCash" checked>
+                            <span>GCash</span>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment"
+                                value="Credit/Debit Card">
+                            <span>Credit/Debit Card</span>
+                        </label>
+
+
+                    </div>
+
+                    <!-- CARD INFORMATION -->
+                    <div id="cardDetails" class="card-details hidden">
+
+                        <h2>Card Information</h2>
+
+                        <div class="form-group">
+                            <label for="cardName">Cardholder Name</label>
+                            <input type="text" id="cardName"
+                                placeholder="Name on card">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber"
+                                placeholder="XXXX XXXX XXXX XXXX"
+                                inputmode="numeric"
+                                maxlength="19">
+                        </div>
+
+                        <div class="card-row">
+
+                            <div class="form-group">
+                                <label for="expiry">Expiration Date</label>
+                                <input type="text" id="expiry"
+                                    placeholder="MM/YY"
+                                    maxlength="5">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cvv">CVV</label>
+                                <input type="password" id="cvv"
+                                    placeholder="CVV"
+                                    inputmode="numeric"
+                                    maxlength="4">
+                            </div>
+
+                        </div>
+
+                        <p class="security-note">
+                            Demo interface only. Do not enter real card details.
+                            Real payments require a secure payment provider.
+                        </p>
+
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        Submit Payment
+                    </button>
+
+                    <p id="message"></p>
+
+                </form>
+
+            </section>
+
+            <!-- BOOKING SUMMARY -->
+            <section class="booking-card">
+
+                <h2>Booking Summary</h2>
+
+                <img
+                    src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"
+                    alt="Rental Car">
+
+                <h3>Toyota Sports Car</h3>
+                <p>Automatic Transmission</p>
+
+                <div class="details">
+                    <p>Pick-up Date <span>Nov 15, 2026</span></p>
+                    <p>Return Date <span>Nov 18, 2026</span></p>
+                    <p>Rental Duration <span>3 Days</span></p>
+                </div>
+
+                <hr>
+
+                <div class="details">
+                    <p>Rental Fee <span>₱3,000</span></p>
+                    <p>Service Fee <span>₱300</span></p>
+                    <p>Tax <span>₱200</span></p>
+                </div>
+
+                <hr>
+
+                <div class="total">
+                    <h3>Total Payment</h3>
+                    <h2>₱3,500</h2>
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+    <footer>
+        <p>© 2026 JCLMR Car Rental. All rights reserved.</p>
+    </footer>
+
+    <script src="pay.js"></script>
+
+</body>
+</html>

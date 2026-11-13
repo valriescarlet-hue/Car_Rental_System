@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental - Receipt</title>
+    <link rel="stylesheet" href="reciept.css">
+
+
+</head>
+
+<body>
+
+<div class="receipt">
+
+    <div class="header">
+        <div>
+            <h1>CAR RENTAL</h1>
+            <p>Payment Receipt</p>
+        </div>
+        <span class="paid">PAID</span>
+    </div>
+
+    <div class="receipt-number">
+        <div>
+            <p>Receipt No.</p>
+            <strong>CR-2026-001</strong>
+        </div>
+
+        <div>
+            <p>Date</p>
+            <strong>November 12, 2026</strong>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Customer Information</h3>
+
+        <div class="details">
+            <div>
+                <p>Customer Name</p>
+                <strong>Juan Dela Cruz</strong>
+            </div>
+
+            <div>
+                <p>Contact Number</p>
+                <strong>09123456789</strong>
+            </div>
+
+            <div>
+                <p>Email Address</p>
+                <strong>juan@gmail.com</strong>
+            </div>
+
+            <div>
+                <p>Address</p>
+                <strong>Angeles City, Pampanga</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Rental Information</h3>
+
+        <div class="details">
+            <div>
+                <p>Car Model</p>
+                <strong>Toyota Vios</strong>
+            </div>
+
+            <div>
+                <p>Plate Number</p>
+                <strong>ABC-1234</strong>
+            </div>
+
+            <div>
+                <p>Pickup Date</p>
+                <strong>November 12, 2026</strong>
+            </div>
+
+            <div>
+                <p>Return Date</p>
+                <strong>November 14, 2026</strong>
+            </div>
+
+            <div>
+                <p>Rental Duration</p>
+                <strong>2 Days</strong>
+            </div>
+
+            <div>
+                <p>Price Per Day</p>
+                <strong>₱1,500.00</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Payment Details</h3>
+
+        <table class="payment-table">
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+            </tr>
+
+            <tr>
+                <td>Car Rental (2 Days)</td>
+                <td>₱3,000.00</td>
+            </tr>
+
+            <tr>
+                <td>Additional Charges</td>
+                <td>₱0.00</td>
+            </tr>
+
+            <tr>
+                <td>Discount</td>
+                <td>₱0.00</td>
+            </tr>
+        </table>
+
+        <div class="total">
+            <span>Total Paid</span>
+            <span>₱3,000.00</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Payment Method</h3>
+
+        <div class="details">
+            <div>
+                <p>Payment Method</p>
+                <strong>GCash</strong>
+            </div>
+
+            <div>
+                <p>Payment Status</p>
+                <strong style="color:green;">Successfully Paid</strong>
+            </div>
+
+            <div>
+                <p>Transaction ID</p>
+                <strong>GC-123456789</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <h3>Thank You for Choosing Us!</h3>
+        <p>We appreciate your business.</p>
+        <p>For inquiries, contact our Car Rental Service.</p>
+        <p>© 2026 Car Rental System</p>
+    </div>
+
+   <div class="buttons">
+    <button class="print" onclick="confirmPayment()">
+        Confirm Payment
+    </button>
+
+    <button class="back" onclick="history.back()">
+        Back
+    </button>
+</div>
+
+</div>
+
+<script>
+function confirmPayment() {
+    const confirmAction = confirm(
+        "Are you sure you want to confirm this payment?"
+    );
+
+    if (confirmAction) {
+
+        // Get existing payments
+        let payments = JSON.parse(
+            localStorage.getItem("payments")
+        ) || [];
+
+        // Create payment record
+        const payment = {
+            receiptNo: "CR-2026-001",
+            customerName: "Juan Dela Cruz",
+            contact: "09123456789",
+            email: "juan@gmail.com",
+            carModel: "Toyota Vios",
+            plateNumber: "ABC-1234",
+            paymentMethod: "GCash",
+            transactionId: "GC-123456789",
+            amount: 3000,
+            paymentStatus: "Paid",
+            date: "November 12, 2026"
+        };
+
+        // Prevent duplicate payment records
+        const alreadyExists = payments.some(
+            p => p.receiptNo === payment.receiptNo
+        );
+
+        if (!alreadyExists) {
+            payments.push(payment);
+
+            localStorage.setItem(
+                "payments",
+                JSON.stringify(payments)
+            );
+        }
+
+        // Redirect customer
+        window.location.href = "customer.html";
+    }
+}
+</script>
+</body>
+</html>
