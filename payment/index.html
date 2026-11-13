@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental - Payment</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h2>🚗 DriveEasy</h2>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Cars</a>
+            <a href="#">Bookings</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <h1>Complete Your Payment</h1>
+        <p class="subtitle">Secure your booking and enjoy your ride!</p>
+
+        <div class="payment-layout">
+
+            <section class="payment-form">
+                <h2>Customer Information</h2>
+
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="Enter your full name">
+
+                <label>Email Address</label>
+                <input type="email" id="email" placeholder="Enter your email">
+
+                <label>Phone Number</label>
+                <input type="tel" id="phone" placeholder="09XXXXXXXXX">
+
+                <h2>Payment Method</h2>
+
+                <div class="payment-options">
+                    <label>
+                        <input type="radio" name="payment" value="GCash" checked>
+                        GCash
+                    </label>
+
+                    <label>
+                        <input type="radio" name="payment" value="Credit Card">
+                        Credit/Debit Card
+                    </label>
+
+                    <label>
+                        <input type="radio" name="payment" value="Cash">
+                        Cash
+                    </label>
+                </div>
+
+                <button onclick="confirmPayment()">
+                    Confirm Payment
+                </button>
+
+                <p id="message"></p>
+            </section>
+
+            <section class="booking-card">
+                <h2>Booking Summary</h2>
+
+                <img
+                    src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800"
+                    alt="Rental Car">
+
+                <h3>Toyota Sports Car</h3>
+                <p>Automatic Transmission</p>
+
+                <div class="details">
+                    <p>Pick-up Date <span>Nov 15, 2026</span></p>
+                    <p>Return Date <span>Nov 18, 2026</span></p>
+                    <p>Rental Duration <span>3 Days</span></p>
+                </div>
+
+                <hr>
+
+                <div class="details">
+                    <p>Rental Fee <span>₱3,000</span></p>
+                    <p>Service Fee <span>₱300</span></p>
+                    <p>Tax <span>₱200</span></p>
+                </div>
+
+                <hr>
+
+                <div class="total">
+                    <h3>Total Payment</h3>
+                    <h2>₱3,500</h2>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 DriveEasy Car Rental | All Rights Reserved</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
